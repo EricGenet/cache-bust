@@ -16,17 +16,17 @@ let options = {
 
 let files = args['_']
   .reduce((files, pattern) => files.concat(
-    glob.sync(pattern).map((f) => path.relative(options.baseDir, f))
+    glob.sync(pattern)
+      .map((f) => path.relative(options.baseDir, f))
   ), [])
 
 console.dir(files)
 
-/**
- * - glob for files
- * - is cwd ? compose relative paths
- * - hash contents
- * - remove old files (optional)
- */
+for (let f of files) {
+  // - hash
+  // - copy
+  // - replace in target files
+}
 
 let cacheBust = {
 }
