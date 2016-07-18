@@ -10,13 +10,18 @@ let crypto = require('crypto')
 /**
  * Parse command line arguments, set defaults
  */
+let getOpt = (long, short, defaultValue) => {
+  if (args.hasOwnProperty(long)) {
+    return args[long]
+  } else if (args.hasOwnProperty(short)) {
+    return args[short]
+  }
+  return defaultValue
+}
 let options = {
-  baseDir: args.hasOwnProperty('baseDir')
-    ? args.baseDir
-    : __dirname,
-  hexLength: args.hasOwnProperty('hexLength')
-    ? args.hexLength
-    : 7
+  baseDir: getOpt('baseDir', 'b', __dirname),
+  hexLength: getOpt('hexLength', 'l', 7),
+  exclude: getOpt('exclude', 'e', '')
 }
 if (!args['referenced'] || !args['referencing']) {
   console.error('`referenced` and `referencing` options must be specified')
@@ -26,9 +31,14 @@ if (!args['referenced'] || !args['referencing']) {
 /**
  * Allow multiple glob patterns, separated by commas or spaces
  */
-let filesFn = (str) => str.split(/[, ]/)
-  .reduce((files, pattern) => files.concat(
-    glob.sync(pattern)), [])
+let filesFn = (str) => {
+//  return str.split(' ')
+  let arr = str.split(' ')
+  let res = glob.sync(arr)
+  return res
+//  .reduce((files, pattern) => files.concat(
+//    glob.sync(pattern)), [])
+}
 
 /**
  * Generate an array to store each referenced file's absolute path, relative
@@ -43,8 +53,6 @@ let referencedFiles = filesFn(args['referenced'])
     }
   })
   .filter((f) => fs.lstatSync(f.abs).isFile())
-
-console.log(referencedFiles)
 
 /**
  * For each referenced file, rename it by appending a part of the hash after
@@ -79,5 +87,3 @@ for (let fileName of filesFn(args['referencing'])) {
 
 let cacheBust = {
 }
-
-module.exports = cacheBust
