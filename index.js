@@ -18,19 +18,30 @@ function filesFn (str, globOptions) {
 }
 
 /**
+ *
+ */
+function hash (absFilePath) {
+  if (!fs.lstatSync(absFilePath).isFile()) {
+    return ''
+  }
+  return crypto
+    .createHash('md5')
+    .update(fs.readFileSync(absFilePath))
+    .digest('hex')
+}
+
+/**
  * Generate an array to store each referenced file's absolute path, relative
  * path (from `baseDir`) and the MD5 hash. Uses the `exclude` option
  */
 function getReferencedFiles (options) {
   let referencedFiles = filesFn(options.referenced, {ignore: []})
     .map((f) => {
+      const absPath = path.resolve(f)
       return {
-        abs: path.resolve(f),
+        abs: absPath,
         relative: path.relative(options.baseDir, f),
-        hash: crypto
-          .createHash('md5')
-          .update(fs.readFileSync(path.resolve(f)))
-          .digest('hex')
+        hash: hash(absPath)
       }
     })
     .filter((f) => fs.lstatSync(f.abs).isFile())
