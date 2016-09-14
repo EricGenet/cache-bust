@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict"
+'use strict'
 
 let args = require('minimist')(process.argv.slice(2))
 let cacheBust = require('./index.js')
@@ -23,7 +23,7 @@ let getOpt = (long, short, defaultValue) => {
 let options = {
   referenced: getOpt('referenced', 'r', ''),
   referencing: getOpt('referencing', 'R', ''),
-  baseDir: getOpt('baseDir', 'b', __dirname),
+  baseDir: getOpt('baseDir', 'b', process.cwd()),
   hexLength: getOpt('hexLength', 'l', 7),
   exclude: getOpt('exclude', 'e', [])
 }
