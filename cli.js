@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+"use strict"
+
 let args = require('minimist')(process.argv.slice(2))
 let cacheBust = require('./index.js')
 

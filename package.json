@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "cache-bust": "./cli.js"
+  },
   "scripts": {
     "test": "standard && node test.js"
   },
